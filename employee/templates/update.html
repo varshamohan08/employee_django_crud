@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee List</title>
+    <style>
+        th, td {
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        function redirectList() {
+            window.location.href = '/list'; 
+        }
+        function updateData(id) {
+        var formData = new FormData(document.querySelector('form'));
+        formData['id'] = id
+        var xhr = new XMLHttpRequest();
+        xhr.open('PUT', '{% url 'employee_list_api' %}', true);
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                window.location.href = '/list';
+            } else {
+                console.error('Request failed:', xhr.statusText);
+            }
+        };
+
+        // Send the request
+        xhr.send(formData);
+    }
+    </script>
+</head>
+<h4 style="padding: 0% 8%; margin-top: 2%;">Enter Employee Details&nbsp;&nbsp;<button onclick="redirectList()">List</button></h4>
+
+<form action="#" enctype="multipart/form-data" style="padding: 0% 8%;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="button" onclick="updateData('{{id.as_p}}')">Update</button>
+</form>

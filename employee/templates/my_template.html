@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee List</title>
+    <style>
+        th, td {
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        function redirectList() {
+            window.location.href = ''; 
+        }
+    </script>
+</head>
+<h4 style="padding: 0% 8%; margin-top: 2%;">Enter Employee Details&nbsp;&nbsp;<button onclick="redirectList()">List</button></h4>
+
+<form method="post" action="{% url 'employee_api' %}" enctype="multipart/form-data" style="padding: 0% 8%;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>

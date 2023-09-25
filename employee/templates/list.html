@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee List</title>
+    <style>
+        th, td {
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        function redirectList() {
+            window.location.href = '/employee_api'; 
+        }
+        function updateEmployee(id) {
+            window.location.href = '/employee_api/'+id; 
+        }
+        function deleteEmployee(email) {
+            const deleteData = {
+                email: email
+            };
+            fetch('employee_api', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(deleteData),
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = '';
+                } else {
+                    console.error('Failed to fetch employee data');
+                }
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h3 style="padding: 0% 2%;">Employee List&nbsp;&nbsp;<button onclick="redirectList()">Create</button></h3>
+    <table style="width: 100%; padding: 0% 2%;">
+        <thead>
+            <tr>
+                <th>EMP ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Photo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.id }}</td>
+                <td>{{ employee.name }}</td>
+                <td>{{ employee.email }}</td>
+                <td>
+                    {% if employee.photo %}
+                    <img src="{{ employee.photo.url }}" alt="{{ employee.name }} Photo" width="100">
+                    {% else %}
+                    No photo available
+                    {% endif %}
+                </td>
+                <td sty>
+                    <button onclick="deleteEmployee('{{ employee.email }}')">Delete</button>
+                    <button onclick="updateEmployee('{{ employee.id }}')">Update</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
